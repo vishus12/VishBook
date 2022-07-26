@@ -23,10 +23,10 @@ namespace VishBook.Repositories
                 {
                     cmd.CommandText = @"
                         INSERT INTO Post (
-                            Title, Content, ImageLocation, CreateDateTime, UserId )
+                            Title, Content, CreateDateTime, UserId )
                         OUTPUT INSERTED.ID
                         VALUES (
-                            @Title, @Content, @ImageLocation, @CreateDateTime, @UserId )";
+                            @Title, @Content, @CreateDateTime, @UserId )";
                     cmd.Parameters.AddWithValue("@Title", post.Title);
                     cmd.Parameters.AddWithValue("@Content", post.Content);
                     cmd.Parameters.AddWithValue("@CreateDateTime", post.CreateDateTime);
@@ -46,7 +46,7 @@ namespace VishBook.Repositories
                 {
                     cmd.CommandText = @"UPDATE Post
                                         SET Title = @title,
-                                            Content = @content,
+                                            Content = @content
                                         WHERE Id = @id";
                     cmd.Parameters.AddWithValue("@title", post.Title);
                     cmd.Parameters.AddWithValue("@content", post.Content);
@@ -124,8 +124,8 @@ namespace VishBook.Repositories
                             Post post = new Post
                             {
                                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                Title = !reader.IsDBNull(reader.GetOrdinal("Title")) ? reader.GetString(reader.GetOrdinal("Notes")) : " ",
-                                Content = !reader.IsDBNull(reader.GetOrdinal("Content")) ? reader.GetString(reader.GetOrdinal("Notes")) : " ",
+                                Title = !reader.IsDBNull(reader.GetOrdinal("Title")) ? reader.GetString(reader.GetOrdinal("Title")) : " ",
+                                Content = !reader.IsDBNull(reader.GetOrdinal("Content")) ? reader.GetString(reader.GetOrdinal("Content")) : " ",
                                 CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                                 UserId = reader.GetInt32(reader.GetOrdinal("UserId"))
                             };
