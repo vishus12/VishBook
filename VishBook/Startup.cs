@@ -26,6 +26,8 @@ namespace VishBook
             services.AddTransient<IFirebaseAuthService, FirebaseAuthService>();
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IPostRepository, PostRepository>();
+            services.AddTransient<IPostMoodRepository, PostMoodRepository>();
+            services.AddTransient<IMoodRepository, MoodRepository>();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

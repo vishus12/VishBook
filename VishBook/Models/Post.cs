@@ -16,5 +16,9 @@ namespace VishBook.Models
         public DateTime CreateDateTime { get; set; }
 
         public int UserId { get; set; }
+
+        public PostMood PostMood { get; set; }
+
+        public Mood Mood { get; set; }
     }
 }
