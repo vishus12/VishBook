@@ -15,6 +15,7 @@ namespace VishBook.Repositories
         List<Post> GetAllPosts();
         Post GetPostById (int id);
         List<Post> GetPostByUserId(int userId);
+        public int GetNewestPost();
 
 
 

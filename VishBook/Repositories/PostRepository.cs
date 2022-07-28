@@ -79,8 +79,10 @@ namespace VishBook.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT Id, Title, Content, CreateDateTime, UserId
-                                        FROM Post";
+                    cmd.CommandText = @"SELECT p.Id, Title, Content, CreateDateTime, UserId,                             m.Name, pm.PostId, pm.MoodId 
+                                        FROM Post p
+                                        LEFT JOIN PostMood pm ON pm.PostId = p.Id
+                                        LEFT JOIN Mood m ON m.Id = pm.MoodId";
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         List<Post> posts = new List<Post>();    
@@ -92,7 +94,11 @@ namespace VishBook.Repositories
                                 Title = reader.GetString(reader.GetOrdinal("Title")),
                                 Content = reader.GetString(reader.GetOrdinal("Content")),
                                 CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
-                                UserId = reader.GetInt32(reader.GetOrdinal("UserId"))
+                                UserId = reader.GetInt32(reader.GetOrdinal("UserId")),
+                                Mood = new Mood
+                                {
+                                    Name = reader.GetString(reader.GetOrdinal("Name"))
+                                }
                             };
 
                             posts.Add(post);
@@ -111,9 +117,11 @@ namespace VishBook.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT Id, Title, Content, CreateDateTime, UserId
-                                        FROM Post
-                                        WHERE Id = @id";
+                    cmd.CommandText = @"SELECT p.Id, Title, Content, CreateDateTime, UserId,                             m.Name, pm.Id, pm.PostId, pm.MoodId 
+                                        FROM Post p
+                                        LEFT JOIN PostMood pm ON pm.PostId = p.Id
+                                        LEFT JOIN Mood m ON m.Id = pm.MoodId
+                                        WHERE p.Id = @id";
 
                     cmd.Parameters.AddWithValue("@id", id);
 
@@ -127,8 +135,19 @@ namespace VishBook.Repositories
                                 Title = !reader.IsDBNull(reader.GetOrdinal("Title")) ? reader.GetString(reader.GetOrdinal("Title")) : " ",
                                 Content = !reader.IsDBNull(reader.GetOrdinal("Content")) ? reader.GetString(reader.GetOrdinal("Content")) : " ",
                                 CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
-                                UserId = reader.GetInt32(reader.GetOrdinal("UserId"))
+                                UserId = reader.GetInt32(reader.GetOrdinal("UserId")),
+                                   Mood = new Mood
+                                   {
+                                     
+                                   }
+
+
                             };
+                            if (reader.IsDBNull(reader.GetOrdinal("Name")) == false)
+                            {
+                                post.Mood.Name = reader.GetString(reader.GetOrdinal("Name"));
+                                post.Mood.Id = reader.GetInt32(reader.GetOrdinal("Id"));
+                            }
                             return post;
                         }
                         else
@@ -147,8 +166,10 @@ namespace VishBook.Repositories
 
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT Id, Title, Content, CreateDateTime, UserId
-                                        FROM Post
+                    cmd.CommandText = @"SELECT p.Id, Title, Content, CreateDateTime, UserId,                             m.Name, pm.PostId, pm.MoodId 
+                                        FROM Post p
+                                        LEFT JOIN PostMood pm ON pm.PostId = p.Id
+                                        LEFT JOIN Mood m ON m.Id = pm.MoodId
                                         WHERE UserId = @userId";
                     cmd.Parameters.AddWithValue("@userId", userId);
 
@@ -163,7 +184,11 @@ namespace VishBook.Repositories
                                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
                                 Content = reader.GetString(reader.GetOrdinal("Content")),
                                 CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
-                                UserId = reader.GetInt32(reader.GetOrdinal("UserId"))
+                                UserId = reader.GetInt32(reader.GetOrdinal("UserId")),
+                                   Mood = new Mood
+                                   {
+                                       
+                                   }
                             };
 
                             if (reader.IsDBNull(reader.GetOrdinal("Title")) == false)
@@ -174,11 +199,36 @@ namespace VishBook.Repositories
                             {
                                 post.Content = reader.GetString(reader.GetOrdinal("Content"));
                             }
+                            if (reader.IsDBNull(reader.GetOrdinal("Name")) == false)
+                            {
+                                post.Mood.Name = reader.GetString(reader.GetOrdinal("Name"));
+                            }
                             posts.Add(post);
                         }
 
                         return posts;
                     }
+                }
+            }
+        }
+        public int GetNewestPost()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT MAX(id) FROM Post";
+                    int Id = 0;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        Id = reader.GetInt32(reader.GetOrdinal("Id"));
+
+
+                    };
+                        return Id;
+           
                 }
             }
         }
