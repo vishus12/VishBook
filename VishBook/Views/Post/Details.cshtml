@@ -1,0 +1,52 @@
+﻿@model VishBook.Models.ViewModel.PostDetailViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container pt-5">
+    <div class="post">
+        <section class="px-3">
+            <div class="row justify-content-between">
+                <h1 class="text-secondary">@Model.Post.Title</h1>
+            </div>
+            <div class="row justify-content-between">
+                <p class="text-black-50">Published on @Html.DisplayFor(model => model.Post.CreateDateTime)</p>
+            </div>
+            
+        </section>
+        <hr />
+        
+        <h3 style="font-weight:800;">Content: </h3>
+        <section class="row post__content">
+            <p style="padding-left:15px;">@Html.DisplayFor(model => model.Post.Content)</p>
+
+        </section>
+        
+       <div style="font-weight:800;">Mood: </div>
+        @foreach (Mood mood in Model.Moods) {
+        <tr>
+            <td>
+         
+                @Html.DisplayFor(modelItem => mood.Name)
+            </td>
+        </tr>
+        <br />
+        }
+    </div>
+</div>
+
+<br />
+<br />
+<br />
+
+
+
+<div>
+   <a asp-action="Edit" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Edit">
+                     <i class="fas fa-edit"></i>
+                </a> 
+                    <a asp-action="Index"  class="btn btn-outline-primary mx-1" title="Back">
+                     <i class="fas fa-backward"></i>
+                     </a>
+</div>

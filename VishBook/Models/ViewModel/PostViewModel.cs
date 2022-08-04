@@ -8,7 +8,7 @@ namespace VishBook.Models.ViewModel
         public Post Post { get; set; }
         public List<Mood> MoodOptions { get; set; }
 
-        public Mood SelectedMood { get; set; }
+        public List<int> SelectedMoods { get; set; }
 
         public PostMood postMood { get; set; }
     }

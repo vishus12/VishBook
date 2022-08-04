@@ -166,10 +166,8 @@ namespace VishBook.Repositories
 
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT p.Id, Title, Content, CreateDateTime, UserId,                             m.Name, pm.PostId, pm.MoodId 
+                    cmd.CommandText = @"SELECT p.Id, Title, Content, CreateDateTime, UserId
                                         FROM Post p
-                                        LEFT JOIN PostMood pm ON pm.PostId = p.Id
-                                        LEFT JOIN Mood m ON m.Id = pm.MoodId
                                         WHERE UserId = @userId";
                     cmd.Parameters.AddWithValue("@userId", userId);
 
@@ -185,10 +183,7 @@ namespace VishBook.Repositories
                                 Content = reader.GetString(reader.GetOrdinal("Content")),
                                 CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                                 UserId = reader.GetInt32(reader.GetOrdinal("UserId")),
-                                   Mood = new Mood
-                                   {
-                                       
-                                   }
+                             
                             };
 
                             if (reader.IsDBNull(reader.GetOrdinal("Title")) == false)
@@ -199,10 +194,7 @@ namespace VishBook.Repositories
                             {
                                 post.Content = reader.GetString(reader.GetOrdinal("Content"));
                             }
-                            if (reader.IsDBNull(reader.GetOrdinal("Name")) == false)
-                            {
-                                post.Mood.Name = reader.GetString(reader.GetOrdinal("Name"));
-                            }
+                     
                             posts.Add(post);
                         }
 
