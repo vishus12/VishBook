@@ -39,6 +39,18 @@ namespace VishBook.Controllers
             return View(posts);
 
         }
+        //[HttpGet("{id}")]
+        public ActionResult Details(int id)
+        {
+            var pdvm = new PostDetailViewModel();
+            pdvm.Post = new Post();
+            pdvm.Moods = new List<Mood>();
+
+            pdvm.Post = _postRepository.GetPostById(id);
+            pdvm.Moods = _moodRepository.GetAllMoodById(id);
+
+            return View(pdvm);
+        }
 
         [Authorize]
         public ActionResult Create()
@@ -55,12 +67,21 @@ namespace VishBook.Controllers
             viewModel.MoodOptions = _moodRepository.GetAllMood();
             try
             {
+               
                 viewModel.postMood = new PostMood();
                 viewModel.Post.UserId = GetCurrentUserId();
                 _postRepository.Add(viewModel.Post);
-                viewModel.postMood.PostId = viewModel.Post.Id;
-                viewModel.postMood.MoodId = viewModel.SelectedMood.Id;
-                _postMoodRepository.Add(viewModel.postMood);
+
+
+                foreach (var mood in viewModel.SelectedMoods)
+                {
+                    //Assignment
+                    viewModel.postMood.PostId = viewModel.Post.Id;
+                    viewModel.postMood.MoodId = mood;
+                    //Send postmood to database
+                    _postMoodRepository.Add(viewModel.postMood);
+                    
+                }
 
                 return RedirectToAction("Index");
             }
@@ -104,9 +125,8 @@ namespace VishBook.Controllers
                 viewModel.MoodOptions = _moodRepository.GetAllMood();
                 viewModel.Post.UserId = GetCurrentUserId();
                 viewModel.postMood.PostId = viewModel.Post.Id;
-                viewModel.postMood.MoodId = viewModel.SelectedMood.Id;
                 _postRepository.Update(viewModel.Post);
-                _postMoodRepository.Update(viewModel.postMood);
+
 
                 return RedirectToAction("Index");
             }

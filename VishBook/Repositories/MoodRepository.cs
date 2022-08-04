@@ -79,6 +79,41 @@ namespace VishBook.Repositories
             }
         }
 
+        public List<Mood> GetAllMoodById(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT m.Id AS mid, m.Name, pm.Id AS pmid, pm.PostId, pm.MoodId
+                                        FROM Mood m
+                                        LEFT JOIN PostMood pm ON m.Id = pm.MoodId
+                                        WHERE PostId =  @id";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        List<Mood> moods = new List<Mood>();
+                        while (reader.Read())
+                        {
+                            Mood mood = new Mood
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("mid")),
+                                Name = reader.GetString(reader.GetOrdinal("Name"))
+
+                            };
+                            moods.Add(mood);
+
+                        }
+                  
+                            return moods;
+                    }
+                }
+            }
+        }
+
     }
 }
 

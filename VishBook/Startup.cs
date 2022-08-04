@@ -59,7 +59,7 @@ namespace VishBook
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=post}/{action=Index}/{id?}");
             });
         }
     }

@@ -27,16 +27,20 @@
                 <input asp-for="Post.CreateDateTime" class="form-control" />
                 <span asp-validation-for="Post.CreateDateTime" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                    <label asp-for="SelectedMood.Id" class="control-label"></label>
-                    <select asp-for="SelectedMood.Id" class="form-control">
-                        @foreach (var mood in Model.MoodOptions)
+           <div class="form-group">
+                <label asp-for="MoodOptions" class="control-label"></label>
+                <select multiple asp-for="SelectedMoods" class="form-control">
+                    <option value="">Select Mood(s)</option>
+                    @if (Model.MoodOptions != null)
+                    {
+                        foreach (var mood in Model.MoodOptions)
                         {
                             <option value="@mood.Id">@mood.Name</option>
                         }
-                    </select>
-                    <span asp-validation-for="SelectedMood.Id" class="text-danger"></span>
-                </div>
+                    }
+                </select>
+                <span asp-validation-for="SelectedMoods" class="text-danger"></span>
+            </div>
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

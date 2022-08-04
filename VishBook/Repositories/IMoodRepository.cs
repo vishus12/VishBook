@@ -9,5 +9,7 @@ namespace VishBook.Repositories
         public List<Mood> GetAllMood();
 
         Mood GetMoodById(int id);
+
+        public List<Mood> GetAllMoodById(int id);
     }
 }
